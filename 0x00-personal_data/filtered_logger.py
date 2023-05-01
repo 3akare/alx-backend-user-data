@@ -6,7 +6,7 @@ filter_datum module
 import re
 import os
 import logging
-# import mysql.connector
+import mysql.connector
 from typing import List
 
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
