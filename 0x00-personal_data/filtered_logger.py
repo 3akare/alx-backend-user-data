@@ -6,6 +6,7 @@ filter_datum module
 import re
 import os
 import logging
+import datetime
 import mysql.connector
 from typing import List
 
@@ -31,10 +32,10 @@ def get_logger() -> logging.Logger:
 def get_db() -> mysql.connector.MySQLConnection:
     '''Connect to database'''
     conn = mysql.connector.connect(
-        host=os.getenv('PERSONAL_DATA_DB_HOST'),
-        user=os.getenv('PERSONAL_DATA_DB_USERNAME'),
-        password=os.getenv('PERSONAL_DATA_DB_PASSWORD'),
-        database=os.getenv('PERSONAL_DATA_DB_NAME')
+        host=os.getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
+        user=os.getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
+        password=os.getenv('PERSONAL_DATA_DB_PASSWORD', '0756abwmb'),
+        database=os.getenv('PERSONAL_DATA_DB_NAME', 'my_db')
     )
     return conn
 
@@ -56,6 +57,31 @@ class RedactingFormatter(logging.Formatter):
         msg = super(RedactingFormatter, self).format(record)
         o = filter_datum(self.fields, self.REDACTION, msg, self.SEPARATOR)
         return o
+
+
+def main():
+    """Retrieves all rows in the users table and displays each row
+    under a filtered format.
+    """
+    fields = ['name', 'email', 'phone', 'ssn', 'password', 'ip', 'last_login', 'user_agent']  # noqa
+    query = f"SELECT {','.join(fields)} FROM users"
+    connection = get_db()
+    logger = logging.getLogger('user_data')
+    logger.setLevel(logging.INFO)
+
+    # Log each row
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        for row in rows:
+            # Filter the fields to be displayed
+            filtered_row = {k: '***' if k in ['name', 'email', 'phone', 'ssn', 'password'] else v for k, v in zip(fields, row)}  # noqa
+            # Format the log message
+            msg = '; '.join([f'{k}={v}' for k, v in filtered_row.items()])
+            logger.info(msg)
+            now = datetime.datetime.now()
+            formatted_date = now.strftime("%Y-%m-%d %H:%M:%S,%f")
+            print(f'[HOLBERTON] user_data INFO {formatted_date},621: {msg};',)
 
 
 if __name__ == '__main__':
