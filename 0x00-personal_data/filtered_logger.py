@@ -69,14 +69,11 @@ def main():
     logger = logging.getLogger('user_data')
     logger.setLevel(logging.INFO)
 
-    # Log each row
     with connection.cursor() as cursor:
         cursor.execute(query)
         rows = cursor.fetchall()
         for row in rows:
-            # Filter the fields to be displayed
             filtered_row = {k: '***' if k in ['name', 'email', 'phone', 'ssn', 'password'] else v for k, v in zip(fields, row)}  # noqa
-            # Format the log message
             msg = '; '.join([f'{k}={v}' for k, v in filtered_row.items()])
             logger.info(msg)
             now = datetime.datetime.now()
