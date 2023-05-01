@@ -4,11 +4,12 @@ filter_datum module
 '''
 
 import re
+import os
 import logging
+# import mysql.connector
 from typing import List
 
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
-
 
 def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> str:  # noqa
     """Filters a log line."""
@@ -23,7 +24,18 @@ def get_logger() -> logging.Logger:
     logger.setLevel(logging.INFO)
     logger.propagate = False
     logger.addHandler(logging.StreamHandler().setFormatter(RedactingFormatter(PII_FIELDS)))  # noqa
-    return logger
+    return logger  
+
+
+def get_db() -> mysql.connector.MySQLConnection:
+    '''Connect to database'''
+    conn = mysql.connector.connect(
+        host=os.getenv('PERSONAL_DATA_DB_HOST'),
+        user=os.getenv('PERSONAL_DATA_DB_USERNAME'),
+        password=os.getenv('PERSONAL_DATA_DB_PASSWORD'),
+        database=os.getenv('PERSONAL_DATA_DB_NAME')
+    )
+    return conn
 
 
 class RedactingFormatter(logging.Formatter):
@@ -43,3 +55,6 @@ class RedactingFormatter(logging.Formatter):
         msg = super(RedactingFormatter, self).format(record)
         o = filter_datum(self.fields, self.REDACTION, msg, self.SEPARATOR)
         return o
+
+if __name__ == '__main__':
+    main()
