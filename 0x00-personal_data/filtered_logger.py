@@ -19,9 +19,9 @@ class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
         """
 
-    REDACTION = "***"
-    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
-    SEPARATOR = ";"
+    REDACTION: str = "***"
+    FORMAT: str = '[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s'  # noqa
+    SEPARATOR: str = ";"
 
     def __init__(self, fields: List[str]) -> None:
         self.fields = fields
@@ -29,4 +29,6 @@ class RedactingFormatter(logging.Formatter):
 
     def format(self, record: logging.LogRecord) -> str:
         """Filters a log line."""
-        return filter_datum(self.fields, self.REDACTION, super(RedactingFormatter, self).format(record), self.SEPARATOR)
+        msg: str = super(RedactingFormatter, self).format(record)
+        o: str = filter_datum(self.fields, self.REDACTION, msg, self.SEPARATOR)
+        return o
