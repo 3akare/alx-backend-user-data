@@ -11,6 +11,7 @@ from typing import List
 
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
 
+
 def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> str:  # noqa
     """Filters a log line."""
     pattern = '|'.join(fields)
@@ -24,7 +25,7 @@ def get_logger() -> logging.Logger:
     logger.setLevel(logging.INFO)
     logger.propagate = False
     logger.addHandler(logging.StreamHandler().setFormatter(RedactingFormatter(PII_FIELDS)))  # noqa
-    return logger  
+    return logger
 
 
 def get_db() -> mysql.connector.MySQLConnection:
@@ -55,6 +56,7 @@ class RedactingFormatter(logging.Formatter):
         msg = super(RedactingFormatter, self).format(record)
         o = filter_datum(self.fields, self.REDACTION, msg, self.SEPARATOR)
         return o
+
 
 if __name__ == '__main__':
     main()
