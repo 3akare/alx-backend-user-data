@@ -13,7 +13,7 @@ def hash_password(password: str) -> bytes:
     return hashed
 
 
-def is_valid(hashed_password, password):
+def is_valid(hashed_password: bytes, password: str) -> bool:
     """
     expects 2 arguments and returns a boolean.
     """
