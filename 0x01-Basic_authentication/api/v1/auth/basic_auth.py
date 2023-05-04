@@ -3,7 +3,7 @@
 Basic Authentication Class Module
 '''
 from api.v1.auth.auth import Auth
-from auth import Auth
+# from auth import Auth
 from base64 import b64decode
 from typing import TypeVar
 from models.user import User
@@ -57,7 +57,7 @@ class BasicAuth(Auth):
 
     def user_object_from_credantials(self, user_email: str, user_pwd: str) -> TypeVar('User'):  # noqa
         '''
-        This code should validate user credentials, but Im having issues
+        This function should validate user credentials, but Im having issues
         importing modules and things like that
         '''
         if type(user_email) == str or type(user_pwd) == str:
