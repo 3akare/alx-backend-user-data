@@ -28,11 +28,13 @@ class Auth:
         authorization_header: Public Method
         Return: None
         '''
-        return request
+        if request is None:
+            return None
+        return request.headers.get('Authorization')
 
     def current_user(self, request=None) -> TypeVar('User'):
         '''
         current_user: Public Method
         Return: None
         '''
-        return request
+        return None
