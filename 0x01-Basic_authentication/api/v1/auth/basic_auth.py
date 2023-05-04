@@ -83,5 +83,5 @@ class BasicAuth(Auth):
         extract_header = self.extract_base64_authorization_header(auth_header)
         decode_header = self.decode_base64_authorization_header(extract_header)
         credentials = self.extract_user_credentials(decode_header)
-        user = self.user_object_from_credentials(credentials[0], credentials[1])
+        user = self.user_object_from_credentials(credentials[0], credentials[1])  # noqa
         return user
