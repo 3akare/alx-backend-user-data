@@ -3,8 +3,10 @@
 Basic Authentication Class Module
 '''
 from api.v1.auth.auth import Auth
-# from auth import Auth
+from auth import Auth
 from base64 import b64decode
+from typing import TypeVar
+from models.user import User
 
 
 class BasicAuth(Auth):
@@ -52,3 +54,19 @@ class BasicAuth(Auth):
             return (None, None)
         credentials = decode_base64_authorization_header.split(':')
         return (credentials[0], credentials[1])
+
+    def user_object_from_credantials(self, user_email: str, user_pwd: str) -> TypeVar('User'):  # noqa
+        '''
+        This code should validate user credentials, but Im having issues
+        importing modules and things like that
+        '''
+        if type(user_email) == str or type(user_pwd) == str:
+            try:
+                user = User.search({'email': user_email})
+            except Exception:
+                return None
+            if len(user) <= 0:
+                return None
+            if user[0].is_valid_password(user_pwd):
+                return user[0]
+        return None
