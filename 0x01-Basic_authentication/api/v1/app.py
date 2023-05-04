@@ -21,13 +21,14 @@ if (getenv('AUTH_TYPE', 'auth')):
 
 @app.before_request
 def before_request_func():
+    """ Before request handler """
     if auth:
         excluded_paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']  # noqa
         if (auth.require_auth(request.path, excluded_paths)):
             if (auth.authorization_header(request) is None):
-                return abort(401)
+                abort(401)
             if (auth.current_user(request) is None):
-                return abort(403)
+                abort(403)
 
 
 @app.errorhandler(404)
