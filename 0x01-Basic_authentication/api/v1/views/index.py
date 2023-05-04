@@ -1,26 +1,33 @@
 #!/usr/bin/env python3
-""" Module of Index views
 """
-from flask import jsonify, abort
+Route module for the API
+"""
+from os import getenv
 from api.v1.views import app_views
+from flask import Flask, jsonify, abort, request
+from flask_cors import (CORS, cross_origin)
+import os
+
+app = Flask(__name__)
+app.register_blueprint(app_views)
+CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 
-@app_views.route('/status', methods=['GET'], strict_slashes=False)
-def status() -> str:
-    """ GET /api/v1/status
-    Return:
-      - the status of the API
+@app.errorhandler(404)
+def not_found(error) -> str:
+    """ Not found handler
     """
-    return jsonify({"status": "OK"})
+    return jsonify({"error": "Not found"}), 404
 
 
-@app_views.route('/stats/', strict_slashes=False)
-def stats() -> str:
-    """ GET /api/v1/stats
-    Return:
-      - the number of each objects
+@app.errorhandler(401)
+def not_authorized(error) -> str:
+    """ Not found handler
     """
-    from models.user import User
-    stats = {}
-    stats['users'] = User.count()
-    return jsonify(stats)
+    return jsonify({"error": "unauthorized"}), 401
+
+
+if __name__ == "__main__":
+    host = getenv("API_HOST", "0.0.0.0")
+    port = getenv("API_PORT", "5000")
+    app.run(host=host, port=port, debug=True)
