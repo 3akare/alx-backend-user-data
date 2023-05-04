@@ -55,7 +55,7 @@ class BasicAuth(Auth):
         credentials = decode_base64_authorization_header.split(':')
         return (credentials[0], credentials[1])
 
-    def user_object_from_credantials(self, user_email: str, user_pwd: str) -> TypeVar('User'):  # noqa
+    def user_object_from_credentials(self, user_email: str, user_pwd: str) -> TypeVar('User'):  # noqa
         '''
         This function should validate user credentials, but Im having issues
         importing modules and things like that
