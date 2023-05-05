@@ -4,6 +4,7 @@ Authentication Class Module
 '''
 from flask import request
 from typing import List, TypeVar
+from os import getenv
 
 
 class Auth:
@@ -42,7 +43,7 @@ class Auth:
         '''
         return None
 
-    def session_cookie(self, request=None):
+    def session_cookie(self, request=None) -> str:
         '''
         Accessing request cookies :)
         '''
