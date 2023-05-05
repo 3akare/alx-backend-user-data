@@ -58,7 +58,7 @@ class BasicAuth(Auth):
     def user_object_from_credentials(self, user_email: str, user_pwd: str) -> TypeVar('User'):  # noqa
         '''
         This function should validate user credentials, but Im having issues
-        importing modules and things like that
+        importing modules and things like that, so I can't really test it
         '''
         if type(user_email) == str or type(user_pwd) == str:
             try:
