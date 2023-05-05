@@ -41,3 +41,11 @@ class Auth:
         Return: None
         '''
         return None
+
+    def session_cookie(self, request=None):
+        '''
+        Accessing request cookies :)
+        '''
+        if request is None:
+            return None
+        return request.cookies.get(getenv('SESSION_NAME'))
