@@ -28,7 +28,7 @@ class SessionAuth(Auth):
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
         '''
-        Retrieving a link between a User ID and a Session ID.
+        Retrieving a link between a User ID and a Session ID
         '''
         if session_id is None or type(session_id) != str:
             return None
@@ -36,7 +36,7 @@ class SessionAuth(Auth):
 
     def current_user(self, request=None):
         '''
-        Get current user from user_id_session and session.cookie
+        Get current user from user_id_session and session cookie
         '''
         user_id = self.user_id_for_session_id(self.session_cookie(request))
         return User.get(user_id)
