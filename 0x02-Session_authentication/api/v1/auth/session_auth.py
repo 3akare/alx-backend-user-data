@@ -5,7 +5,7 @@ Session Authentication Module
 
 from api.v1.auth.auth import Auth
 from models.users import User
-from typing import TypeVar
+# from auth import Auth
 from uuid import uuid4
 
 
@@ -28,7 +28,7 @@ class SessionAuth(Auth):
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
         '''
-        Retrieving a link between a User ID and a Session ID
+        Retrieving a link between a User ID and a Session ID.
         '''
         if session_id is None or type(session_id) != str:
             return None
