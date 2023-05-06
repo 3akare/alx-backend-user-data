@@ -5,7 +5,7 @@ Session Authentication Module
 
 from api.v1.auth.auth import Auth
 from models.users import User
-from flask import request
+from typing import TypeVar
 # from auth import Auth
 from uuid import uuid4
 
@@ -35,10 +35,9 @@ class SessionAuth(Auth):
             return None
         return self.user_id_by_session_id.get(session_id)
 
-    def current_user(self, request=None) -> User:
+    def current_user(self, request=None) -> TypeVar('User'):
         '''
         Get current user from user_id_session and session cookie
         '''
-        user = User()
         user_id = self.user_id_for_session_id(self.session_cookie(request))
-        return user.get(user_id)
+        return User.get(user_id)
