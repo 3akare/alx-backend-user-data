@@ -39,5 +39,8 @@ class SessionAuth(Auth):
         '''
         Get current user from user_id_session and session cookie
         '''
-        user_id = self.user_id_for_session_id(self.session_cookie(request))
-        return User.get(user_id)
+        if request:
+            session_cookie = self.session_cookie(request)
+            if session_cookie:
+                user_id = self.user_id_for_session_id(session_cookie)
+                return User.get(user_id)
