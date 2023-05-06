@@ -5,6 +5,7 @@ Session Authentication Module
 
 from api.v1.auth.auth import Auth
 from models.users import User
+from flask import request
 # from auth import Auth
 from uuid import uuid4
 
