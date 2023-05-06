@@ -3,10 +3,9 @@
 Session Authentication Module
 '''
 
-from api.v1.auth.auth import Auth
-from models.users import User
-# from auth import Auth
+from auth import Auth
 from uuid import uuid4
+from os import getenv
 
 
 class SessionAuth(Auth):
@@ -33,3 +32,11 @@ class SessionAuth(Auth):
         if session_id is None or type(session_id) != str:
             return None
         return self.user_id_by_session_id.get(session_id)
+
+    def session_cookie(self, request=None):
+        '''
+        Accessing request cookies :)
+        '''
+        if request is None:
+            return None
+        return request.cookies.get(getenv('SESSION_NAME'))
