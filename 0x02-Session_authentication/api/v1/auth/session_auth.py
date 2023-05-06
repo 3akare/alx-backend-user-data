@@ -36,7 +36,9 @@ class SessionAuth(Auth):
         return self.user_id_by_session_id.get(session_id)
 
     def current_user(self, request=None) -> TypeVar('User'):
-        ''' Use Session ID for identifying a User
+        '''
+        current_user: Public Method
+        Return: None
         '''
         if request:
             session_cookie = self.session_cookie(request)
