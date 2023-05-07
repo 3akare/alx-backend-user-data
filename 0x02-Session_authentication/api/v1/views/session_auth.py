@@ -15,24 +15,26 @@ def auth_session_login():
     POST /auth_session/login (= POST /api/v1/auth_session/login)
     '''
     email = request.form.get('email')
-    if email == "" or email is None:
-        return jsonify({"error": "email missing"}), 400
-
     password = request.form.get('password')
-    if password == "" or password is None:
+    if email is None or email == "":
+        return jsonify({"error": "email missing"}), 400
+    if password is None or password == "":
         return jsonify({"error": "password missing"}), 400
+
     try:
-        Auth_user = User.search({"email": email})
+        users = User.search({'email': email})
     except Exception:
-        return jsonify({"error": "no user found for this email"}), 404
+        return jsonify({"error": "no user found for this email"})
 
-    if Auth_user is None or len(Auth_user) <= 0:
-        return jsonify({"error": "no user found for this email"}), 404
+    if len(users) <= 0:
+        return jsonify({"error": "no user found for this email"})
 
-    if Auth_user[0].is_valid_password(password) :
-        from api.v1.api import auth
-        session_id = auth.create_session(Auth_user[0].id)
-        resp = jsonify(Auth_user[0].to_json())
-        resp.set_cookie(getenv('SESSION_NAME'), session_id)
-        return resp
+    for user in users:
+        if user.is_valid_password(password):
+            user_id = getattr(user, 'id')
+            from api.v1.app import auth
+            session_id = auth.create_session(user_id)
+            resp = jsonify(user.to_json())
+            resp.set_cookie(getenv('SESSION_NAME'), session_id)
+            return resp
     return jsonify({"error": "wrong password"}), 401
