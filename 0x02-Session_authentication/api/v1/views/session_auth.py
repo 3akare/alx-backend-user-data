@@ -9,8 +9,8 @@ from os import getenv
 from models.user import User
 
 
-@app_views.route('/auth_session/login', method=['POST'], strict_slashes=False)
-def auth_session_login() -> str:
+@app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
+def auth_session_login():
     '''
     POST /auth_session/login (= POST /api/v1/auth_session/login)
     '''
@@ -26,13 +26,13 @@ def auth_session_login() -> str:
     except Exception:
         return jsonify({"error": "no user found for this email"}), 404
 
-    if Auth_user is None:
+    if Auth_user is None or len(Auth_user) <= 0:
         return jsonify({"error": "no user found for this email"}), 404
 
     if Auth_user[0].is_valid_password(password) is None:
         return jsonify({"error": "wrong password"}), 401
     else:
-        from api.v1.auth.auth import auth
+        from api.v1.api import auth
         session_id = auth.create_session(Auth_user[0].id)
         resp = jsonify(Auth_user[0].to_json())
         resp.set_cookie(getenv('SESSION_NAME'), session_id)
