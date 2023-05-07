@@ -29,11 +29,10 @@ def auth_session_login():
     if Auth_user is None or len(Auth_user) <= 0:
         return jsonify({"error": "no user found for this email"}), 404
 
-    if Auth_user[0].is_valid_password(password) is None:
-        return jsonify({"error": "wrong password"}), 401
-    else:
+    if Auth_user[0].is_valid_password(password) :
         from api.v1.api import auth
         session_id = auth.create_session(Auth_user[0].id)
         resp = jsonify(Auth_user[0].to_json())
         resp.set_cookie(getenv('SESSION_NAME'), session_id)
         return resp
+    return jsonify({"error": "wrong password"}), 401
