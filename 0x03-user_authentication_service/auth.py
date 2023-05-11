@@ -4,6 +4,7 @@ Another Day, Another Module
 '''
 import bcrypt
 
+
 def _hash_password(password: str) -> bytes:
     '''
     expects one string argument name password and returns a salted
