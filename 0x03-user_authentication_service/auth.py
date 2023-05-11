@@ -2,7 +2,7 @@
 '''
 Another Day, Another Module
 '''
-import bcrypt.hashpw
+import bcrypt
 
 def _hash_password(password: str) -> bytes:
     '''
