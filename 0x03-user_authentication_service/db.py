@@ -66,8 +66,9 @@ class DB:
         """
         try:
             user = self.find_user_by(id=user_id)
-        except (InvalidRequestError, NoResultFound):
+            if user is None:
+                return
+            self._session.query(User).filter(User.id == user_id).update({list(kwargs.keys())[0]: list(kwargs.values())[0]})  # noqa
+            return None
+        except (InvalidRequestError, NoResultFound, NameError):
             raise ValueError
-        user.hashed_password = list(kwargs.values())[0]
-        self._session.commit()
-        return None
