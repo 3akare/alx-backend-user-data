@@ -68,7 +68,7 @@ class DB:
             user = self.find_user_by(id=user_id)
             if user is None:
                 return
-            self._session.query(User).filter(User.id == user_id).update({list(kwargs.keys())[0]: list(kwargs.values())[0]})  # noqa
+            self._session.query(User).filter(User.id == user_id).update(kwargs)
             return None
         except (InvalidRequestError, NoResultFound, NameError):
             raise ValueError
