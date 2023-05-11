@@ -49,16 +49,10 @@ class DB:
         """
         Finds a user based on a keyword
         """
-        if list(kwargs.keys())[0] is not 'email':
+        if 'email' not in kwargs or list(kwargs.keys())[0] != 'email':
             raise InvalidRequestError
 
-        table = []
-        result = self._session.query(User).all()
-        for row in result:
-            table.append(row.email)
-
-        if list(kwargs.values())[0] not in table:
+        user = self._session.query(User).filter_by(email=list(kwargs.values())[0]).first()  # noqa
+        if not user:
             raise NoResultFound
-
-        user = self._session.query(User).filter(User.email == list(kwargs.values())[0]).first()  # noqa
         return user
