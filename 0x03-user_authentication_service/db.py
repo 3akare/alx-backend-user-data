@@ -47,12 +47,15 @@ class DB:
 
     def find_user_by(self, **kwargs) -> User:
         """
-        Finds a user based on a keyword
+        Finds a user based on a set of filters.
         """
-        if 'email' not in kwargs or list(kwargs.keys())[0] != 'email':
-            raise InvalidRequestError
-
-        user = self._session.query(User).filter_by(email=list(kwargs.values())[0]).first()  # noqa
-        if not user:
-            raise NoResultFound
-        return user
+        query = self._session.query(User)
+        for key, value in kwargs.items():
+            if hasattr(User, key):
+                query = query.filter(getattr(User, key) == value)
+            else:
+                raise InvalidRequestError()
+        result = query.first()
+        if result is None:
+            raise NoResultFound()
+        return result
