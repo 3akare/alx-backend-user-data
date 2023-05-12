@@ -18,7 +18,7 @@ class Auth:
 
     def register_user(self, email: str, password: str) -> User:
         """
-        Registers a user that haven't previously been registered
+        Registers a user that hasn't been registered
         """
         try:
             self._db.find_user_by(email=email)
@@ -93,7 +93,7 @@ class Auth:
         except NoResultFound:
             raise ValueError
         hashed_password = _hash_password(password)
-        self._db.update_user(user.id, password=hashed_password, reset_token=None)  # noqa
+        self._db.update_user(user.id, hashed_password=hashed_password, reset_token=None)  # noqa
 
 
 def _hash_password(password: str) -> bytes:
