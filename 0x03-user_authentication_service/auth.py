@@ -40,13 +40,6 @@ class Auth:
             return bcrypt.checkpw(password.encode('utf-8'), user.hashed_password)  # noqa
         return False
 
-    @property
-    def _generate_uuid() -> str:
-        '''
-        Generate UUID string
-        '''
-        return uuid4()
-
 
 def _hash_password(password: str) -> bytes:
     '''
@@ -55,3 +48,10 @@ def _hash_password(password: str) -> bytes:
     '''
     hashed: bytes = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     return hashed
+
+
+def _generate_uuid() -> str:
+    '''
+    Generate UUID string
+    '''
+    return str(uuid4())
