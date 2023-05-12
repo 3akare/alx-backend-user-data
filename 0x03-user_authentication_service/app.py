@@ -4,7 +4,7 @@ Flask Application
 '''
 
 from auth import Auth
-from flask import jsonify, Flask, request, abort
+from flask import jsonify, Flask, request, abort, redirect
 
 app = Flask(__name__)
 AUTH = Auth()
@@ -46,6 +46,19 @@ def login() -> str:
     response = jsonify({"email": email, "message": "logged in"})
     response.set_cookie("session_id", session_id)
     return response
+
+
+@app.route('/sessions', methods=['DELETE'], strict_slashes=False)
+def logout():
+    '''
+    Destroys a user's session and redirect the user to the index page
+    '''
+    session_id = request.get.cookies("session_id")
+    user = Auth.get_user_from_session_id(session_id)
+    if user is None:
+        abort(403)
+    Auth.destroy_session(user.id)
+    return redirect('/')
 
 
 if __name__ == '__main__':
