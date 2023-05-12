@@ -49,7 +49,7 @@ def login() -> str:
 
 
 @app.route('/sessions', methods=['DELETE'], strict_slashes=False)
-def logout():
+def logout() -> str:
     '''
     Destroys a user's session and redirect the user to the index page
     '''
