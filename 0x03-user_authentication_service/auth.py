@@ -39,6 +39,18 @@ class Auth:
         if user:
             return bcrypt.checkpw(password.encode('utf-8'), user.hashed_password)  # noqa
         return False
+    
+    def create_session(self, email: str) -> str:
+        """
+        Create Session ID for users
+        """
+        try:
+            user = self._db.find_user_by(email=email)
+            session_id = _generate_uuid()
+            self._db.update_user(user.id, session_id=session_id)
+        except NoResultFound:
+            session_id = None
+        return session_id
 
 
 def _hash_password(password: str) -> bytes:
