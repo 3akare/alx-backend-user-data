@@ -49,11 +49,11 @@ def login() -> str:
 
 
 @app.route('/sessions', methods=['DELETE'], strict_slashes=False)
-def logout():
+def logout() -> str:
     '''
     Destroys a user's session and redirect the user to the index page
     '''
-    session_id = request.get.cookies("session_id")
+    session_id = request.cookies.get("session_id")
     user = Auth.get_user_from_session_id(session_id)
     if user is None:
         abort(403)
@@ -61,5 +61,6 @@ def logout():
     return redirect('/')
 
 
+@app.route('/profile')
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port='5000')
