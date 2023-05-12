@@ -49,7 +49,7 @@ def login() -> str:
 
 
 @app.route('/sessions', methods=['DELETE'], strict_slashes=False)
-def logout() -> str:
+def logout():
     '''
     Destroys a user's session and redirect the user to the index page
     '''
@@ -62,7 +62,7 @@ def logout() -> str:
 
 
 @app.route('/profile', methods=['GET'], strict_slashes=False)
-def profile() -> str:
+def profile():
     '''
     Profile function
     '''
@@ -86,6 +86,20 @@ def get_token() -> str:
         return jsonify({"email": email, "reset_token": token})
     except ValueError:
         abort(403)
+
+
+@app.route('/reset_password', methods=['PUT'], strict_slashes=False)
+def update_password() -> str:
+    '''
+    Update password
+    '''
+    email, token, password = request.form.get('email'), request.form.get('token'), request.form.get('new_password')  # noqa
+    try:
+        AUTH.update_password(token, password)
+    except ValueError:
+        abort(403)
+
+    return jsonify({"email": email, "message": "Password updated"})
 
 
 if __name__ == '__main__':
