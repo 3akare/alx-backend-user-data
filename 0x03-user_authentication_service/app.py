@@ -93,7 +93,7 @@ def update_password() -> str:
     '''
     Update password
     '''
-    email, token, password = request.form.get('email'), request.form.get('token'), request.form.get('new_password')  # noqa
+    email, token, password = request.form.get('email'), request.form.get('reset_token'), request.form.get('new_password')  # noqa
     try:
         AUTH.update_password(token, password)
     except ValueError:
