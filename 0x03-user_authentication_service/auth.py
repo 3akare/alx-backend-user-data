@@ -39,7 +39,7 @@ class Auth:
         if user:
             return bcrypt.checkpw(password.encode('utf-8'), user.hashed_password)  # noqa
         return False
-    
+
     def create_session(self, email: str) -> str:
         """
         Create Session ID for users
