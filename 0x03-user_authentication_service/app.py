@@ -54,6 +54,8 @@ def logout() -> str:
     Destroys a user's session and redirect the user to the index page
     '''
     session_id = request.cookies.get("session_id")
+    if session_id is None:
+        abort(403)
     user = AUTH.get_user_from_session_id(session_id)
     if user is None:
         abort(403)
@@ -67,6 +69,8 @@ def profile():
     Profile function
     '''
     session_id = request.cookies.get("session_id")
+    if session_id is None:
+        abort(403)
     user = AUTH.get_user_from_session_id(session_id)
     if user is None:
         abort(403)
